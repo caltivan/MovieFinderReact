@@ -12,6 +12,7 @@ import {
   StyleSheet,
   Text,
   Button,
+  Image,
   useColorScheme,
   View,
   Alert,
@@ -28,12 +29,17 @@ import {
 const styles = StyleSheet.create({
   sectionContainer: {
     marginTop: 32,
+    flex: 1,
+    flexDirection: 'column',
     paddingHorizontal: 24,
   },
   columns: {
-    margin: 16,
-    justifyContent: 'space-evenly',
+    justifyContent: 'space-around',
   },
+  poster: {
+   width: 150,
+   height: 200,
+ },
 });
 
 class Test extends Component {
@@ -51,9 +57,10 @@ class Test extends Component {
 
   async getMovies() {
       try {
-        const response = await fetch('https://reactnative.dev/movies.json');
-        const json = await response.json();
-        this.setState({ data: json.movies });
+      //  const response = await fetch('https://reactnative.dev/movies.json');
+        const response = await fetch('http://api.themoviedb.org/3/discover/movie?api_key=4cb1eeab94f45affe2536f2c684a5c9e');
+        const jsonResponse = await response.json();
+        this.setState({ data: jsonResponse.results });
       } catch (error) {
         console.log(error);
       } finally {
@@ -75,15 +82,14 @@ class Test extends Component {
         //Alert.alert(item.title);
         //navigation.navigate('Profile', { name: item.title })
         const { navigate } = this.props.navigation;
-
-        navigate('Profile', { name: item.title })
+        navigate('Detail', { overview: item.overview ,poster_path:item.poster_path })
     }
 
  render() {
    const { data, isLoading } = this.state;
 
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.sectionContainer}>
       {isLoading ? <ActivityIndicator/> : (
          <FlatList
            columnWrapperStyle={styles.columns}
@@ -91,8 +97,19 @@ class Test extends Component {
            data={data}
            keyExtractor={({ id }, index) => id}
            renderItem={({ item }) => (
-             <Text style={styles.item}
-             onPress={this.getListViewItem.bind(this, item)}>{item.title}, {item.releaseYear}</Text>
+             //source:{uri:'https://image.tmdb.org/t/p/original/k2twTjSddgLc1oFFHVibfxp2kQV.jpg'}>
+             <TouchableOpacity
+              style={styles.button}
+              onPress={this.getListViewItem.bind(this, item)}
+             >
+            <View style={styles.container} >
+
+            <Image style={styles.poster} source={{uri:'https://image.tmdb.org/t/p/original' + item.poster_path}}/>
+              <Text style={styles.item}>
+                {item.title}{"\n"}{item.release_date}
+              </Text>
+            </View>
+            </TouchableOpacity>
 
            )}
          />
@@ -103,12 +120,12 @@ class Test extends Component {
         >
          <Text>Click me</Text>
         </TouchableOpacity>
-        <View>
+        <View >
           <Text>
             You clicked { this.state.count } times
           </Text>
         </View>
-      </View>
+      </SafeAreaView>
     )
   }
 }

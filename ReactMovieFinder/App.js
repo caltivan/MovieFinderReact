@@ -42,7 +42,7 @@
                 component={HomeScreen}
                 options={{ title: 'Home' }}
               />
-              <Stack.Screen name="Profile" component={MovieDetailScreen} />
+              <Stack.Screen name='Detail'  component={MovieDetailScreen} />
             </Stack.Navigator>
         </NavigationContainer>
 
