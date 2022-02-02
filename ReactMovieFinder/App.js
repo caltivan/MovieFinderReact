@@ -25,47 +25,13 @@
 
     import {
       Colors,
-      DebugInstructions,
-      Header,
-      LearnMoreLinks,
-      ReloadInstructions,
     } from 'react-native/Libraries/NewAppScreen';
 
     const styles = StyleSheet.create({
-      sectionContainer: {
-        marginTop: 32,
-        paddingHorizontal: 24,
-      },
-      sectionTitle: {
-        fontSize: 24,
-        fontWeight: '600',
-      },
-      sectionDescription: {
-        marginTop: 8,
-        fontSize: 18,
-        fontWeight: '400',
-      },
+
     });
 
     const Stack = createNativeStackNavigator();
-
-
-    const MyStack = () => {
-      return (
-        <NavigationContainer>
-          <Stack.Navigator>
-            <Stack.Screen
-              name="Home"
-              component={HomeScreen}
-              options={{ title: 'Welcome' }}
-            />
-            <Stack.Screen name="Profile" component={ProfileScreen} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      );
-    };
-
-
 
     const App: () => Node = () => {
       return (
@@ -74,7 +40,7 @@
               <Stack.Screen
                 name="Home"
                 component={HomeScreen}
-                options={{ title: 'title' }}
+                options={{ title: 'Home' }}
               />
               <Stack.Screen name="Profile" component={MovieDetailScreen} />
             </Stack.Navigator>

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, {Component} from 'react';
 import MainMovieList from './MainMovieList.js';
 import type {Node} from 'react';
 
 import {
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
   SafeAreaView,
   ScrollView,
   StatusBar,
@@ -11,6 +14,7 @@ import {
   Button,
   useColorScheme,
   View,
+  Alert,
 } from 'react-native';
 
 import {
@@ -26,51 +30,92 @@ const styles = StyleSheet.create({
     marginTop: 32,
     paddingHorizontal: 24,
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  columns: {
+    margin: 16,
+    justifyContent: 'space-evenly',
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-
 });
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
+class Test extends Component {
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      data: [],
+      isLoading: true,
+      count: 0,
+
+    };
+  }
+
+  async getMovies() {
+      try {
+        const response = await fetch('https://reactnative.dev/movies.json');
+        const json = await response.json();
+        this.setState({ data: json.movies });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.setState({ isLoading: false });
+      }
+    }
+
+  componentDidMount() {
+      this.getMovies();
+    }
+
+  onPress = () => {
+    this.setState({
+      count: this.state.count + 1
+    })
+  }
+
+  getListViewItem = (item) => {
+        //Alert.alert(item.title);
+        //navigation.navigate('Profile', { name: item.title })
+        const { navigate } = this.props.navigation;
+
+        navigate('Profile', { name: item.title })
+    }
+
+ render() {
+   const { data, isLoading } = this.state;
+
+    return (
+      <View style={styles.container}>
+      {isLoading ? <ActivityIndicator/> : (
+         <FlatList
+           columnWrapperStyle={styles.columns}
+           numColumns={2}
+           data={data}
+           keyExtractor={({ id }, index) => id}
+           renderItem={({ item }) => (
+             <Text style={styles.item}
+             onPress={this.getListViewItem.bind(this, item)}>{item.title}, {item.releaseYear}</Text>
+
+           )}
+         />
+       )}
+        <TouchableOpacity
+         style={styles.button}
+         onPress={this.onPress}
+        >
+         <Text>Click me</Text>
+        </TouchableOpacity>
+        <View>
+          <Text>
+            You clicked { this.state.count } times
+          </Text>
+        </View>
+      </View>
+    )
+  }
+}
 
 
 const HomeScreen = ({ navigation }) => {
   const isDarkMode = useColorScheme() === 'dark';
-
   const backgroundStyle = {
     flex: 1,
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
@@ -91,4 +136,4 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
-export default HomeScreen;
+export default Test;

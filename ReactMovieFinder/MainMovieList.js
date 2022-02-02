@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { FlatList, StyleSheet, Text, View } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {
    flex: 1,
-   paddingTop: 22
+   paddingTop: 22,
+  },
+  columns: {
+    justifyContent: 'space-evenly',
   },
   item: {
     padding: 10,
@@ -13,11 +16,12 @@ const styles = StyleSheet.create({
   },
 });
 
+
 const MainMovieList = () => {
   return (
     <View style={styles.container}>
       <FlatList
-        columnWrapperStyle={{justifyContent: 'space-between'}}
+        columnWrapperStyle={styles.columns}
         numColumns={2}
         data={[
           {key: 'Devin'},
@@ -31,9 +35,10 @@ const MainMovieList = () => {
           {key: 'Jimmy'},
           {key: 'Julie'},
         ]}
-        renderItem={
-          ({item}) => <Text style={styles.item}>{item.key}</Text>
-        }
+        keyExtractor={(item) => item.key.toString()}
+        renderItem={({item}) => (
+          <Text style={styles.item}>{item.key}</Text>
+        )}
       />
     </View>
   );
