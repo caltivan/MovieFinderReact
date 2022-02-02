@@ -34,7 +34,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
   },
   columns: {
+
     justifyContent: 'space-around',
+  },
+  item: {
+    width: 100,
+    flex: 1,
+    flexWrap: 'wrap',
   },
   poster: {
    width: 150,
