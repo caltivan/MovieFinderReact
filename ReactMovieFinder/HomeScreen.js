@@ -48,6 +48,7 @@ const styles = StyleSheet.create({
  },
 });
 
+
 class Test extends Component {
 
   constructor(props) {
@@ -77,6 +78,7 @@ class Test extends Component {
   componentDidMount() {
       this.getMovies();
     }
+
 
   onPress = () => {
     this.setState({
